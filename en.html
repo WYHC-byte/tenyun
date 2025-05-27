@@ -1,0 +1,735 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tenyun Tech</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#5D5CDE',
+                        tencent: {
+                            blue: '#0052D9',
+                            gray: '#f5f5f5'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Noto Sans', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans:wght@100;300;400;500;700;900&display=swap');
+        
+        body {
+            font-family: 'Noto Sans', sans-serif;
+        }
+        
+        /* Logo styling */
+        .tenyun-logo {
+            display: flex;
+            align-items: center;
+            font-weight: bold;
+        }
+        
+        .logo-text, .logo-text-cn {
+            color: #2389f2;
+            position: relative;
+            font-size: 28px;
+            line-height: 1;
+            letter-spacing: -0.5px;
+            text-shadow: 1px 1px 1px rgba(0,0,0,0.1);
+        }
+        
+        .logo-text {
+            font-family: 'Arial', sans-serif;
+            margin-right: 4px;
+        }
+        
+        .logo-text-cn {
+            font-family: 'Noto Sans', sans-serif;
+        }
+        
+        /* 3D effect for logo text */
+        .logo-text::after, .logo-text-cn::after {
+            content: attr(data-text);
+            position: absolute;
+            left: 1px;
+            top: 2px;
+            color: rgba(0,0,0,0.1);
+            z-index: -1;
+        }
+        
+        /* Dark mode adjustments for logo */
+        .dark .logo-text, .dark .logo-text-cn {
+            text-shadow: 1px 1px 1px rgba(0,0,0,0.5);
+        }
+        
+        .dark .logo-text::after, .dark .logo-text-cn::after {
+            color: rgba(255,255,255,0.1);
+        }
+        
+        .slide-nav-dot {
+            width: 28px;
+            height: 4px;
+            transition: all 0.3s ease;
+        }
+        
+        .slide-nav-dot.active {
+            background-color: #5D5CDE;
+        }
+        
+        .dark .slide-nav-dot.active {
+            background-color: #5D5CDE;
+        }
+        
+        .news-card {
+            transition: transform 0.3s ease;
+        }
+        
+        .news-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .scroll-top-button {
+            transition: all 0.3s ease;
+        }
+        
+        .hero-section {
+            background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.5)), url('https://static.www.tencent.com/uploads/2025/05/14/7aef4cbb6361e2d280a101c9e4dc2268.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        /* Dropdown menu styles */
+        .nav-item {
+            position: relative;
+        }
+        
+        .dropdown-menu {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            min-width: 200px;
+            background-color: white;
+            border-radius: 4px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s;
+            z-index: 50;
+        }
+        
+        .dark .dropdown-menu {
+            background-color: #1E1E1E;
+        }
+        
+        .nav-item:hover .dropdown-menu {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+        
+        .product-card {
+            transition: all 0.3s ease;
+        }
+        
+        .product-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        
+        /* Header scroll behavior */
+        .header-transparent {
+            background-color: transparent;
+            box-shadow: none;
+        }
+        
+        .header-filled {
+            background-color: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(8px);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+        
+        .dark .header-filled {
+            background-color: rgba(24, 24, 24, 0.95);
+        }
+        
+        .header-hidden {
+            transform: translateY(-100%);
+        }
+        
+        /* Fancy text highlight */
+        .highlight-gradient {
+            background: linear-gradient(to right, #0052D9, #5D5CDE);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            font-weight: 700;
+        }
+        
+        /* Section title styling */
+        .section-title {
+            position: relative;
+            display: inline-block;
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            width: 60px;
+            height: 3px;
+            background-color: #0052D9;
+            border-radius: 3px;
+        }
+        
+        /* Quote styling */
+        .fancy-quote {
+            border-left: 4px solid #0052D9;
+            padding-left: 1rem;
+            font-style: italic;
+            font-weight: 300;
+        }
+    </style>
+</head>
+<body class="bg-white dark:bg-[#181818] text-gray-800 dark:text-gray-200">
+    <!-- Check for dark mode -->
+    <script>
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            document.documentElement.classList.add('dark');
+        }
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
+            if (event.matches) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+        });
+    </script>
+
+    <!-- Header -->
+    <header id="siteHeader" class="w-full fixed top-0 z-50 transition-all duration-300">
+        <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+            <div class="flex items-center">
+                <a href="index.html" class="flex items-center">
+                    <div class="tenyun-logo flex items-center h-10">
+                        <span class="logo-text" data-text="Tenyun">Tenyun</span>
+                        <span class="logo-text-cn" data-text="Tech">Tech</span>
+                    </div>
+                </a>
+            </div>
+            <nav class="hidden md:flex space-x-8">
+                <div class="nav-item">
+                    <a href="#" class="text-gray-100 font-light hover:text-primary dark:hover:text-primary transition-colors">About</a>
+                    <div class="dropdown-menu py-2">
+                        <a href="#" class="block px-4 py-2 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-primary dark:hover:text-primary">Company Profile</a>
+                        <a href="#" class="block px-4 py-2 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-primary dark:hover:text-primary">Corporate Culture</a>
+                        <a href="#" class="block px-4 py-2 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-primary dark:hover:text-primary">Development History</a>
+                        <a href="#" class="block px-4 py-2 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-primary dark:hover:text-primary">Management Team</a>
+                    </div>
+                </div>
+                <div class="nav-item">
+                    <a href="#jorkai" class="text-gray-100 font-light hover:text-primary dark:hover:text-primary transition-colors">Business</a>
+                    <div class="dropdown-menu py-2">
+                        <a href="#jorkai" class="block px-4 py-2 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-primary dark:hover:text-primary">JorkAI</a>
+                        <a href="#tenyungame" class="block px-4 py-2 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-primary dark:hover:text-primary">Tenyun Gaming</a>
+                    </div>
+                </div>
+                <div class="nav-item">
+                    <a href="#" class="text-gray-100 font-light hover:text-primary dark:hover:text-primary transition-colors">Careers</a>
+                    <div class="dropdown-menu py-2">
+                        <a href="#" class="block px-4 py-2 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-primary dark:hover:text-primary">Job Openings</a>
+                        <a href="#" class="block px-4 py-2 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-primary dark:hover:text-primary">Employee Benefits</a>
+                        <a href="#" class="block px-4 py-2 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-primary dark:hover:text-primary">Career Development</a>
+                        <a href="#" class="block px-4 py-2 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-primary dark:hover:text-primary">Work Environment</a>
+                    </div>
+                </div>
+                <div class="nav-item">
+                    <a href="#news" class="text-gray-100 font-light hover:text-primary dark:hover:text-primary transition-colors">News</a>
+                    <div class="dropdown-menu py-2">
+                        <a href="#news" class="block px-4 py-2 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-primary dark:hover:text-primary">Financial Reports</a>
+                        <a href="#news" class="block px-4 py-2 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-primary dark:hover:text-primary">Company Announcements</a>
+                        <a href="#news" class="block px-4 py-2 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-primary dark:hover:text-primary">Investor Activities</a>
+                        <a href="#news" class="block px-4 py-2 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-primary dark:hover:text-primary">Stock Information</a>
+                    </div>
+                </div>
+                <div class="nav-item">
+                    <a href="#footer" class="text-gray-100 font-light hover:text-primary dark:hover:text-primary transition-colors">Media</a>
+                    <div class="dropdown-menu py-2">
+                        <a href="#footer" class="block px-4 py-2 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-primary dark:hover:text-primary">Press Releases</a>
+                        <a href="#footer" class="block px-4 py-2 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-primary dark:hover:text-primary">Media Library</a>
+                        <a href="#footer" class="block px-4 py-2 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-primary dark:hover:text-primary">Media Contacts</a>
+                        <a href="#footer" class="block px-4 py-2 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-primary dark:hover:text-primary">Brand Resources</a>
+                    </div>
+                </div>
+            </nav>
+            <div class="flex space-x-4">
+                <a href="index.html" class="text-gray-100 hover:text-primary dark:hover:text-primary transition-colors">EN</a>
+                <a href="ZH-tw.html" class="text-gray-100 hover:text-primary dark:hover:text-primary transition-colors">繁</a>
+                <a href="en.html" class="text-gray-100 hover:text-primary dark:hover:text-primary transition-colors">简</a>
+                <button id="mobileMenuButton" class="md:hidden text-gray-100 dark:text-gray-300">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <!-- Mobile Menu -->
+        <div id="mobileMenu" class="hidden md:hidden bg-white dark:bg-[#181818] shadow-md w-full">
+            <div class="container mx-auto px-4 py-2 flex flex-col space-y-3">
+                <a href="#" class="py-2 text-gray-600 dark:text-gray-300 hover:text-primary dark:hover:text-primary">About</a>
+                <a href="#" class="py-2 text-gray-600 dark:text-gray-300 hover:text-primary dark:hover:text-primary">Business</a>
+                <a href="#" class="py-2 text-gray-600 dark:text-gray-300 hover:text-primary dark:hover:text-primary">Careers</a>
+                <a href="#" class="py-2 text-gray-600 dark:text-gray-300 hover:text-primary dark:hover:text-primary">ESG</a>
+                <a href="#" class="py-2 text-gray-600 dark:text-gray-300 hover:text-primary dark:hover:text-primary">Investors</a>
+                <a href="#" class="py-2 text-gray-600 dark:text-gray-300 hover:text-primary dark:hover:text-primary">Media</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero-section h-screen flex items-center pt-16">
+        <div class="container mx-auto px-4 py-16">
+            <div class="max-w-4xl">
+                <h1 class="text-4xl md:text-6xl font-black text-white mb-4">Tenyun Redefines <span class="text-tencent-blue">Cloud Intelligence</span> Technology</h1>
+                <p class="text-xl md:text-2xl font-light text-white mb-8">Tenyun Tech is committed to leading the future through <span class="italic">technological innovation</span>, pioneering a new era of <span class="highlight-gradient">intelligence and entertainment</span>
+                <div class="flex space-x-4 mt-16">
+                    <button class="bg-transparent border border-white text-white px-8 py-2 rounded-md hover:bg-white hover:text-gray-800 transition duration-300">
+                        Learn More
+                    </button>
+                    <button class="bg-tencent-blue text-white px-8 py-2 rounded-md hover:bg-opacity-90 transition duration-300">
+                        View Details
+                    </button>
+                </div>
+            </div>
+            <div class="absolute bottom-24 left-1/2 transform -translate-x-1/2 flex space-x-4">
+                <button id="prevSlide" class="text-white hover:text-primary transition duration-300">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                    </svg>
+                </button>
+                <button id="nextSlide" class="text-white hover:text-primary transition duration-300">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                    </svg>
+                </button>
+            </div>
+            <div class="absolute bottom-10 left-1/2 transform -translate-x-1/2 flex space-x-2">
+                <div class="slide-nav-dot active bg-white"></div>
+                <div class="slide-nav-dot bg-gray-400"></div>
+                <div class="slide-nav-dot bg-gray-400"></div>
+                <div class="slide-nav-dot bg-gray-400"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Latest News Section -->
+    <section class="py-16 bg-gray-50 dark:bg-[#121212]" id="news">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold mb-12 section-title">Latest News</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- News Card 1 -->
+                <div class="news-card bg-white dark:bg-[#1E1E1E] rounded-lg overflow-hidden shadow-md">
+                    <div class="h-60 overflow-hidden">
+                        <img src="https://lh5.googleusercontent.com/i7Io4UxQzGfykPDT-m-5oiOCbUzx2tCsNfK_PnH9Kx4iJPy6wDuJIV5ZNloIMBDIF9D92ibOeObtKveyDNzrsr8=w16383" alt="Square airways Logo" class="w-full h-full object-cover">
+                    </div>
+                    <div class="p-6 relative">
+                        <div class="absolute top-0 left-0 transform -translate-y-1/2 bg-tencent-blue text-white py-1 px-4">
+                            <span class="font-light text-sm">2025.05.27</span>
+                        </div>
+                        <h3 class="text-xl font-bold mt-4 mb-3">Tenyun Tech and <span class="italic">Square Airways</span> Form Year-Long Strategic Partnership</h3>
+                        <p class="text-gray-600 dark:text-gray-400 mb-4 font-light">Tenyun Tech has signed a year-long strategic cooperation agreement with Square Airways for mutual benefit</p>
+                    </div>
+                </div>
+
+                <!-- News Card 2 -->
+                <div class="news-card bg-white dark:bg-[#1E1E1E] rounded-lg overflow-hidden shadow-md">
+                    <div class="h-60 overflow-hidden">
+                        <img src="https://static.www.tencent.com/uploads/2025/03/24/571ae629ece530a801b7092ab3e63f73.jpg!article.cover" alt="Gaming" class="w-full h-full object-cover">
+                    </div>
+                    <div class="p-6 relative">
+                        <div class="absolute top-0 left-0 transform -translate-y-1/2 bg-tencent-blue text-white py-1 px-4">
+                            <span class="font-light text-sm">2025.05.09</span>
+                        </div>
+                        <h3 class="text-xl font-bold mt-4 mb-3">The Foundation of Great Games: <span class="highlight-gradient">Connection, Creativity, and Innovation</span></h3>
+                        <p class="text-gray-600 dark:text-gray-400 mb-4 font-light">Tenyun Gaming Studio undergoes reformation with a focus on connection, creativity, and innovation</p>
+                    </div>
+                </div>
+
+                <!-- News Card 3 -->
+                <div class="news-card bg-white dark:bg-[#1E1E1E] rounded-lg overflow-hidden shadow-md">
+                    <div class="h-60 overflow-hidden">
+                        <img src="https://static.www.tencent.com/uploads/2025/05/19/c256ff89f26b0099eb14c177ab96bcf6.jpg!article.cover" alt="Security" class="w-full h-full object-cover">
+                    </div>
+                    <div class="p-6 relative">
+                        <div class="absolute top-0 left-0 transform -translate-y-1/2 bg-tencent-blue text-white py-1 px-4">
+                            <span class="font-light text-sm">2025.04.09</span>
+                        </div>
+                        <h3 class="text-xl font-bold mt-4 mb-3">Hunan Cheer Equipment Co., Ltd. Partners with <span class="text-tencent-blue font-black">JorkAI</span></h3>
+                        <p class="text-gray-600 dark:text-gray-400 mb-4 font-light">Tenyun Tech's JorkAI announces collaboration with Hunan Cheer Equipment Co., Ltd. to safeguard the company's data security</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- JorkAI Section -->
+    <section class="py-16 bg-white dark:bg-[#181818]" id="jorkai">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row items-center gap-12">
+                <div class="w-full md:w-1/2">
+                    <div class="rounded-xl overflow-hidden bg-gradient-to-r from-blue-600 to-indigo-600 p-1">
+                        <div class="bg-white dark:bg-[#1E1E1E] rounded-lg p-8 h-full">
+                            <div class="flex items-center mb-6">
+                                <svg class="w-10 h-10 text-tencent-blue mr-3" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM12 20C7.59 20 4 16.41 4 12C4 7.59 7.59 4 12 4C16.41 4 20 7.59 20 12C20 16.41 16.41 20 12 20Z" />
+                                    <path d="M15 8H13V12.59L16.2 15.79L17.62 14.38L15 11.75V8Z" />
+                                </svg>
+                                <h3 class="text-2xl font-bold text-gray-800 dark:text-white">JorkAI <span class="text-tencent-blue">Large Language Model</span></h3>
+                            </div>
+                            <p class="text-gray-700 dark:text-gray-300 mb-6 font-light leading-relaxed">Tenyun's latest AI large language model, optimized for English and multilingual scenarios, with outstanding comprehension capabilities and creativity.</p>
+                            <ul class="space-y-3 mb-8">
+                                <li class="flex items-start">
+                                    <svg class="w-5 h-5 text-tencent-blue mt-1 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                    </svg>
+                                    <span class="text-gray-600 dark:text-gray-400 font-light">Multilingual support with fluent communication in over <span class="font-semibold">30 languages</span></span>
+                                </li>
+                                <li class="flex items-start">
+                                    <svg class="w-5 h-5 text-tencent-blue mt-1 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                    </svg>
+                                    <span class="text-gray-600 dark:text-gray-400 font-light">Deep understanding of <span class="italic">cultural contexts and nuances</span></span>
+                                </li>
+                                <li class="flex items-start">
+                                    <svg class="w-5 h-5 text-tencent-blue mt-1 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                    </svg>
+                                    <span class="text-gray-600 dark:text-gray-400 font-light">Powerful <span class="font-semibold">code generation</span> and analysis capabilities</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <svg class="w-5 h-5 text-tencent-blue mt-1 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                    </svg>
+                                    <span class="text-gray-600 dark:text-gray-400 font-light"><span class="font-semibold">Seamless integration</span> with Tenyun ecosystem</span>
+                                </li>
+                            </ul>
+                            <a href="https://jorkai.cn" class="inline-flex items-center text-tencent-blue hover:underline">
+                                <span>Visit JorkAI Website</span>
+                                <svg class="w-4 h-4 ml-1" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="w-full md:w-1/2">
+                    <h2 class="text-3xl font-black mb-6">Tenyun <span class="text-tencent-blue">JorkAI</span> Large Language Model</h2>
+                    <p class="text-gray-600 dark:text-gray-400 mb-6 font-light leading-relaxed">JorkAI is Tenyun's latest large language model, built on advanced deep learning technology and trained on vast datasets to provide users with an innovative intelligent service experience.</p>
+                    <p class="fancy-quote text-gray-600 dark:text-gray-400 mb-8 leading-relaxed">As a core component of Tenyun's AI strategy, JorkAI not only excels in natural language processing but also understands complex contexts and multiple languages, enabling deep interactive dialogues to support research, education, content creation, and business decision-making.</p>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="bg-gray-50 dark:bg-[#1E1E1E] p-4 rounded-lg">
+                            <h4 class="font-bold mb-2">Developer Support</h4>
+                            <p class="text-sm text-gray-600 dark:text-gray-400 font-light">Rich API interfaces and development tools</p>
+                        </div>
+                        <div class="bg-gray-50 dark:bg-[#1E1E1E] p-4 rounded-lg">
+                            <h4 class="font-bold mb-2">Enterprise Solutions</h4>
+                            <p class="text-sm text-gray-600 dark:text-gray-400 font-light">Customized AI services for business needs</p>
+                        </div>
+                        <div class="bg-gray-50 dark:bg-[#1E1E1E] p-4 rounded-lg">
+                            <h4 class="font-bold mb-2">Privacy & Security</h4>
+                            <p class="text-sm text-gray-600 dark:text-gray-400 font-light">Strict data protection and security standards</p>
+                        </div>
+                        <div class="bg-gray-50 dark:bg-[#1E1E1E] p-4 rounded-lg">
+                            <h4 class="font-bold mb-2">Continuous Innovation</h4>
+                            <p class="text-sm text-gray-600 dark:text-gray-400 font-light">Regular updates and capability enhancements</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Tencent Cloud Gaming Section -->
+    <section class="py-16 bg-gray-50 dark:bg-[#121212]" id="tenyungame">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-black mb-6 text-center section-title mx-auto" style="width: fit-content;">Tenyun Gaming</h2>
+            <p class="text-gray-600 dark:text-gray-400 mb-12 text-center max-w-3xl mx-auto font-light leading-relaxed">Breaking device limitations, enjoy high-quality gaming experiences <span class="italic">anytime, anywhere</span></p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="product-card bg-white dark:bg-[#1E1E1E] rounded-lg overflow-hidden shadow-lg">
+                    <div class="h-48 bg-gradient-to-r from-purple-500 to-indigo-600 flex items-center justify-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 4a2 2 0 114 0v1a1 1 0 001 1h3a1 1 0 011 1v3a1 1 0 01-1 1h-1a2 2 0 100 4h1a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1v-1a2 2 0 10-4 0v1a1 1 0 01-1 1H7a1 1 0 01-1-1v-3a1 1 0 00-1-1H4a2 2 0 110-4h1a1 1 0 001-1V7a1 1 0 011-1h3a1 1 0 001-1V4z" />
+                        </svg>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-3">START<span class="font-light text-gray-500"> Cloud Gaming Platform</span></h3>
+                        <p class="text-gray-600 dark:text-gray-400 mb-4 font-light leading-relaxed">Tenyun's gaming platform supports multi-device access, breaks hardware limitations, and offers <span class="italic">zero-download instant play</span>.</p>
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="px-2 py-1 bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 rounded text-xs">Cross-platform</span>
+                            <span class="px-2 py-1 bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 rounded text-xs">Low Latency</span>
+                            <span class="px-2 py-1 bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 rounded text-xs">High Quality</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="product-card bg-white dark:bg-[#1E1E1E] rounded-lg overflow-hidden shadow-lg">
+                    <div class="h-48 bg-gradient-to-r from-blue-500 to-teal-400 flex items-center justify-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                        </svg>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-3">Game Developer <span class="font-light text-gray-500">Platform</span></h3>
+                        <p class="text-gray-600 dark:text-gray-400 mb-4 font-light leading-relaxed">Providing game developers with <span class="font-medium">one-stop cloud gaming integration solutions</span> for quick cloud platform deployment.</p>
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="px-2 py-1 bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 rounded text-xs">SDK</span>
+                            <span class="px-2 py-1 bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 rounded text-xs">API</span>
+                            <span class="px-2 py-1 bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 rounded text-xs">Technical Support</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="product-card bg-white dark:bg-[#1E1E1E] rounded-lg overflow-hidden shadow-lg">
+                    <div class="h-48 bg-gradient-to-r from-red-500 to-yellow-500 flex items-center justify-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z" />
+                        </svg>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-3">Game Streaming <span class="font-light text-gray-500">& Community</span></h3>
+                        <p class="text-gray-600 dark:text-gray-400 mb-4 font-light leading-relaxed">Deep integration of game streaming and cloud gaming, allowing viewers to <span class="italic font-medium">instantly join games</span> while watching their favorite streamers.</p>
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="px-2 py-1 bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 rounded text-xs">Livestreaming</span>
+                            <span class="px-2 py-1 bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 rounded text-xs">Community</span>
+                            <span class="px-2 py-1 bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 rounded text-xs">Interaction</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mt-12 text-center">
+                <a href="https://game.tenyun.ltd" class="inline-flex items-center px-6 py-3 bg-tencent-blue text-white rounded-md hover:bg-opacity-90 transition duration-300">
+                    <span>Explore More Cloud Gaming Products</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+                    </svg>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Great Wall Section -->
+    <section class="py-16 bg-white dark:bg-[#181818] relative" id="greatwall">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row">
+                <div class="w-full md:w-7/12 mb-8 md:mb-0">
+                    <div class="relative h-96 md:h-[500px] overflow-hidden rounded-lg">
+                        <img src="https://www.tencent.com/data/business/flx-2.jpg" alt="Global" class="w-full h-full object-cover">
+                        <div class="absolute bottom-0 left-0 bg-black bg-opacity-50 p-6 text-white">
+                            <h3 class="text-xl font-bold mb-2">Tenyun Cloud Services</h3>
+                            <p class="text-sm font-light">Together with our partners, Tenyun is committed to building a rich, open cloud service ecosystem to drive digital transformation across industries.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="w-full md:w-5/12 md:pl-12 flex flex-col justify-center">
+                    <h2 class="text-4xl font-thin mb-4">Connecting</h2>
+                    <h2 class="text-4xl font-black mb-8">Responsibility and Trust</h2>
+                    <p class="text-gray-600 dark:text-gray-400 mb-8 font-light italic">Tenyun's dedicated cloud service brand, providing customers with leading cloud products and services</p>
+                    <a href="#" class="inline-block">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                        </svg>
+                    </a>
+                </div>
+            </div>
+            <div class="absolute bottom-6 right-6">
+                <button id="scrollTop" class="scroll-top-button w-12 h-12 rounded-full border border-gray-300 dark:border-gray-700 flex items-center justify-center text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-12 bg-gray-100 dark:bg-[#121212]" id="footer">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+                <div>
+                    <h3 class="text-lg font-bold mb-4 text-gray-800 dark:text-gray-200">About Tenyun</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-600 dark:text-gray-400 hover:text-primary dark:hover:text-primary font-light">Company Profile</a></li>
+                        <li><a href="#" class="text-gray-600 dark:text-gray-400 hover:text-primary dark:hover:text-primary font-light">Mission & Vision</a></li>
+                        <li><a href="#" class="text-gray-600 dark:text-gray-400 hover:text-primary dark:hover:text-primary font-light">Management Team</a></li>
+                        <li><a href="#" class="text-gray-600 dark:text-gray-400 hover:text-primary dark:hover:text-primary font-light">Development History</a></li>
+                        <li><a href="https://www.jorkai.cn/donation.html" class="text-gray-600 dark:text-gray-400 hover:text-primary dark:hover:text-primary font-light">Support Us</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-lg font-bold mb-4 text-gray-800 dark:text-gray-200">Products & Services</h3>
+                    <ul class="space-y-2">
+                        <li><a href="https://www.jorkai.cn" class="text-gray-600 dark:text-gray-400 hover:text-primary dark:hover:text-primary font-light">JorkAI</a></li>
+                        <li><a href="https://game.tenyun.ltd" class="text-gray-600 dark:text-gray-400 hover:text-primary dark:hover:text-primary font-light">Tenyun Gaming</a></li>
+                        <li><a href="https://cloud.tenyun.ltd" class="text-gray-600 dark:text-gray-400 hover:text-primary dark:hover:text-primary font-light">Tenyun Cloud Services</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-lg font-bold mb-4 text-gray-800 dark:text-gray-200">Partner Links</h3>
+                    <ul class="space-y-2">
+                        <li><a href="https://bit.ly/squareairways" class="text-gray-600 dark:text-gray-400 hover:text-primary dark:hover:text-primary font-light">Square Airways Website</a></li>
+                        <li><a href="https://www.hncheer.ltd" class="text-gray-600 dark:text-gray-400 hover:text-primary dark:hover:text-primary font-light">Hunan Cheer Equipment Co., Ltd</a></li>
+                        <li><a href="https://www.jorkai.cn" class="text-gray-600 dark:text-gray-400 hover:text-primary dark:hover:text-primary font-light">JorkAI</a></li>
+                        <li><a href="https://www.tenyun.ltd" class="text-gray-600 dark:text-gray-400 hover:text-primary dark:hover:text-primary font-light">Tenyun Tech</a></li>
+                        <li><a href="https://game.tenyun.ltd" class="text-gray-600 dark:text-gray-400 hover:text-primary dark:hover:text-primary font-light">Tenyun Gaming</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-lg font-bold mb-4 text-gray-800 dark:text-gray-200">Contact Us</h3>
+                    <p class="text-gray-600 dark:text-gray-400 mb-4 font-light">Tencent Binhai Building, 33 Haitian Second Road, Nanshan District, Shenzhen</p>
+                    <p class="text-gray-600 dark:text-gray-400 mb-4 font-light">Email: info@tenyun.ltd</p>
+                    <div class="flex space-x-4 mt-4">
+                        <a href="https://www.weixin.com" aria-label="WeChat" class="text-gray-600 dark:text-gray-400 hover:text-primary dark:hover:text-primary">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M8.691 2.188C3.891 2.188 0 5.476 0 9.53c0 2.212 1.17 4.203 3.002 5.55a.59.59 0 0 1 .213.665l-.39 1.48c-.019.07-.048.141.011.17.05.024.13-.02.18-.07l2.058-1.17a.624.624 0 0 1 .557-.07c1.032.338 2.122.52 3.06.52 4.798 0 8.691-3.289 8.691-7.345 0-4.052-3.893-7.339-8.691-7.339zm-.232 9.8a.723.723 0 0 1-.724-.722.723.723 0 0 1 .724-.723.723.723 0 0 1 .724.724.723.723 0 0 1-.724.722zm3.99 0a.723.723 0 0 1-.722-.722.723.723 0 0 1 .723-.723.723.723 0 0 1 .722.724.723.723 0 0 1-.722.722z"/>
+                                <path d="M23.997 15.344c0-3.477-3.34-6.303-7.47-6.303-4.133 0-7.47 2.826-7.47 6.303 0 3.476 3.337 6.302 7.47 6.302.847 0 1.671-.15 2.447-.416a.62.62 0 0 1 .494.047l1.702.984c.067.04.151.084.21.054.05-.027.027-.095.008-.156l-.322-1.229a.594.594 0 0 1 .182-.576c1.764-1.332 2.749-3.031 2.749-5.01zm-9.865-.054a.604.604 0 0 1-.604-.603.603.603 0 0 1 .604-.603.602.602 0 0 1 .603.603.603.603 0 0 1-.603.603zm4.795 0a.604.604 0 0 1-.604-.603.603.603 0 0 1 .604-.603.602.602 0 0 1 .603.603.603.603 0 0 1-.603.603z"/>
+                            </svg>
+                        </a>
+                        <a href="https://www.weibo.com" aria-label="Weibo" class="text-gray-600 dark:text-gray-400 hover:text-primary dark:hover:text-primary">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M10.098 20.323c-3.977.391-7.414-1.406-7.672-4.02-.259-2.609 2.759-5.047 6.74-5.441 3.979-.394 7.413 1.404 7.671 4.018.259 2.6-2.759 5.049-6.739 5.439zM9.05 17.219a1.9 1.9 0 0 1-2.225-1.485 1.9 1.9 0 0 1 1.485-2.225c1.176-.21 2.302.499 2.513 1.527.238 1.176-.499 2.301-1.773 2.183z"/>
+                                <path d="M20.21 14.791a1.194 1.194 0 0 0-1.156-1.073.504.504 0 0 1-.117-.987c1.762-.825 3.004-2.86 2.95-5.062 0-.244-.49-3.657-3.354-3.657-.697.048-1.162-.58-1.162-1.156.049-.63.581-1.107 1.166-1.107 4.018-.049 5.545 4.592 5.598 5.986.049 1.157-.234 2.313-.757 3.324a6.37 6.37 0 0 1-3.168 2.732z"/>
+                                <path d="M16.622 11.073a.562.562 0 0 1-.642-.536.562.562 0 0 1 .477-.583c1.414-.239 2.428-1.461 2.38-2.827 0-.051-.101-1.257-1.529-1.257a.562.562 0 1 1 0-1.123c2.018-.05 2.651 1.824 2.699 2.851.049 2.067-1.311 3.96-3.385 4.475z"/>
+                            </svg>
+                        </a>
+                        <a href="https://www.bilibili.com" aria-label="Bilibili" class="text-gray-600 dark:text-gray-400 hover:text-primary dark:hover:text-primary">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M17.813 4.653h.854c1.51.054 2.769.578 3.773 1.574 1.004.995 1.524 2.249 1.56 3.76v7.36c-.036 1.51-.556 2.769-1.56 3.773s-2.262 1.524-3.773 1.56H5.333c-1.51-.036-2.769-.556-3.773-1.56S.036 18.858 0 17.347v-7.36c.036-1.511.556-2.765 1.56-3.76 1.004-.996 2.262-1.52 3.773-1.574h.774l-1.174-1.12a1.234 1.234 0 0 1-.373-.906c0-.356.124-.658.373-.907l.027-.027c.267-.249.573-.373.92-.373.347 0 .653.124.92.373L9.653 4.44c.071.071.134.142.187.213h4.267a.836.836 0 0 1 .16-.213l2.853-2.747c.267-.249.573-.373.92-.373.347 0 .662.151.929.4.267.249.391.551.391.907 0 .355-.124.657-.373.906L17.813 4.653zM5.333 7.24c-.746.018-1.373.276-1.88.773-.506.498-.769 1.13-.786 1.894v7.52c.017.764.28 1.395.786 1.893.507.498 1.134.756 1.88.773h13.334c.746-.017 1.373-.275 1.88-.773.506-.498.769-1.129.786-1.893v-7.52c-.017-.765-.28-1.396-.786-1.894-.507-.497-1.134-.755-1.88-.773H5.333zM8 11.107c.373 0 .684.124.933.373.25.249.383.569.4.96v1.173c-.017.391-.15.711-.4.96-.249.25-.56.374-.933.374s-.684-.125-.933-.374c-.25-.249-.383-.569-.4-.96V12.44c0-.373.129-.689.386-.947.258-.257.574-.386.947-.386zm8 0c.373 0 .684.124.933.373.25.249.383.569.4.96v1.173c-.017.391-.15.711-.4.96-.249.25-.56.374-.933.374s-.684-.125-.933-.374c-.25-.249-.383-.569-.4-.96V12.44c.017-.391.15-.711.4-.96.249-.249.56-.373.933-.373z"/>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-gray-200 dark:border-gray-700 pt-8">
+                <div class="flex flex-col md:flex-row justify-between items-center">
+                    <div class="mb-4 md:mb-0">
+                        <p class="text-gray-600 dark:text-gray-400 font-light">© 2023 - 2025 Tenyun Tech All Rights Reserved.</p>
+                    </div>
+                    <div class="flex flex-wrap gap-4">
+                        <a href="#" class="text-gray-600 dark:text-gray-400 hover:text-primary dark:hover:text-primary font-light">Privacy Policy</a>
+                        <a href="#" class="text-gray-600 dark:text-gray-400 hover:text-primary dark:hover:text-primary font-light">Terms of Use</a>
+                        <a href="#" class="text-gray-600 dark:text-gray-400 hover:text-primary dark:hover:text-primary font-light">Contact Us</a>
+                        <a href="#" class="text-gray-600 dark:text-gray-400 hover:text-primary dark:hover:text-primary font-light">Site Map</a>
+                        <a href="#" class="text-gray-600 dark:text-gray-400 hover:text-primary dark:hover:text-primary font-light">Disclaimer</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Initialize logo text data attributes for 3D effect
+        document.querySelector('.logo-text').setAttribute('data-text', 'Tenyun');
+        document.querySelector('.logo-text-cn').setAttribute('data-text', 'Tech');
+        
+        // Mobile menu toggle
+        const mobileMenuButton = document.getElementById('mobileMenuButton');
+        const mobileMenu = document.getElementById('mobileMenu');
+
+        mobileMenuButton.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        // Scroll to top
+        const scrollTopButton = document.getElementById('scrollTop');
+        
+        scrollTopButton.addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+
+        // Hero slider dots
+        const dots = document.querySelectorAll('.slide-nav-dot');
+        const prevSlide = document.getElementById('prevSlide');
+        const nextSlide = document.getElementById('nextSlide');
+        
+        let currentSlide = 0;
+        
+        function updateDots() {
+            dots.forEach((dot, index) => {
+                if (index === currentSlide) {
+                    dot.classList.add('active');
+                } else {
+                    dot.classList.remove('active');
+                }
+            });
+        }
+        
+        prevSlide.addEventListener('click', () => {
+            currentSlide = (currentSlide - 1 + dots.length) % dots.length;
+            updateDots();
+        });
+        
+        nextSlide.addEventListener('click', () => {
+            currentSlide = (currentSlide + 1) % dots.length;
+            updateDots();
+        });
+        
+        dots.forEach((dot, index) => {
+            dot.addEventListener('click', () => {
+                currentSlide = index;
+                updateDots();
+            });
+        });
+        
+        // Header scroll behavior
+        const header = document.getElementById('siteHeader');
+        let lastScrollTop = 0;
+        
+        // Initialize header as transparent when at the top
+        if (window.scrollY === 0) {
+            header.classList.add('header-transparent');
+        } else {
+            header.classList.add('header-filled');
+        }
+        
+        window.addEventListener('scroll', () => {
+            const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+            
+            // Transparent at the top, filled when scrolled
+            if (scrollTop === 0) {
+                header.classList.add('header-transparent');
+                header.classList.remove('header-filled', 'header-hidden');
+            } else {
+                header.classList.remove('header-transparent');
+                header.classList.add('header-filled');
+                
+                // Hide on scroll down, show on scroll up
+                if (scrollTop > lastScrollTop && scrollTop > 100) {
+                    // Scrolling down & not at the top
+                    header.classList.add('header-hidden');
+                } else {
+                    // Scrolling up
+                    header.classList.remove('header-hidden');
+                }
+            }
+            
+            lastScrollTop = scrollTop;
+        });
+    </script>
+</body>
+</html>
